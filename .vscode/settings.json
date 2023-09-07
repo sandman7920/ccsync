@@ -1,0 +1,15 @@
+{
+    "gopls": {
+        "ui.navigation.importShortcut": "Definition",
+        "ui.semanticTokens": true
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/build/**": true,
+        "**/bin/**": true,
+        "**/downloads/**": true,
+        "**/resources/**": true,
+    },
+    "editor.semanticHighlighting.enabled": true,
+}
