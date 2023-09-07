@@ -18,4 +18,4 @@ export CGO_ENABLED=1
 export GOOS=linux
 export GOARCH=arm
 export GOARM=7 
-go build $VERBOSE $EXTRA $GCC_VERBOSE -o ./build && mv ./build/ccsync kual/extensions/ccsync/
+go build $VERBOSE $EXTRA $GCC_VERBOSE -o ./build/ && mv ./build/ccsync kual/extensions/ccsync/
