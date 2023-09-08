@@ -1,29 +1,17 @@
 package calibre
 
 import (
-	"encoding/json"
 	"io"
 	"os"
 	"sort"
 	"strings"
+
+	"github.com/buger/jsonparser"
 )
 
-type Entity struct {
-	CDEKey  string
-	CdeType string
-}
-
 type Record struct {
-	Entities []Entity
-	Title    string
-}
-
-func (r *Record) CDEKeys() []string {
-	result := make([]string, 0, len(r.Entities))
-	for _, e := range r.Entities {
-		result = append(result, e.CDEKey)
-	}
-	return result
+	CDEKeys []string
+	Title   string
 }
 
 type Collection []Record
@@ -40,9 +28,6 @@ func (c Collection) IndexOf(title string) int {
 	return -1
 }
 
-// Returns *calibre.Record
-//
-// if record is not found returns nil
 func (c Collection) Record(title string) *Record {
 	idx := c.IndexOf(title)
 	if idx == -1 {
@@ -61,24 +46,21 @@ func get_json_data(json_file string) ([]byte, error) {
 	return io.ReadAll(fp)
 }
 
-func normalize_item(item string) (result Entity) {
+func normalize_item(item string) (result string) {
 	if strings.HasPrefix(item, "#") {
-		result.CDEKey, result.CdeType, _ = strings.Cut(item[1:], "^")
+		result, _, _ = strings.Cut(item[1:], "^")
 	} else {
-		result.CDEKey = item
-		result.CdeType = "EBOK"
+		result = item
 	}
 	return
 }
 
-func normalize_items(values map[string]interface{}) (result []Entity) {
-	items, found := values["items"]
-	if !found {
-		return
-	}
-	for _, item := range items.([]interface{}) {
-		result = append(result, normalize_item(item.(string)))
-	}
+func normalize_items(items []byte) (result []string) {
+	jsonparser.ArrayEach(items, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+		if err == nil {
+			result = append(result, normalize_item(string(value)))
+		}
+	})
 	return
 }
 
@@ -89,20 +71,26 @@ func NewCollection(json_file string) (Collection, error) {
 	}
 
 	var records Collection
-	var cc map[string]map[string]interface{}
-	err = json.Unmarshal(data, &cc)
-	if err != nil {
-		return nil, err
-	}
-	for k, v := range cc {
-		if idx := strings.LastIndex(k, "@"); idx > -1 {
-			k = k[:idx]
+
+	err = jsonparser.ObjectEach(data, func(key, value []byte, dataType jsonparser.ValueType, offset int) error {
+		if idx := strings.LastIndex(string(key), "@"); idx > -1 {
+			key = key[:idx]
+		}
+		items, _, _, err := jsonparser.Get(value, "items")
+		if err != nil {
+			return err
 		}
 
 		records = append(records, Record{
-			Title:    k,
-			Entities: normalize_items(v),
+			Title:   string(key),
+			CDEKeys: normalize_items(items),
 		})
+
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
 	}
 
 	sort.SliceStable(records, func(lhs, rhs int) bool {

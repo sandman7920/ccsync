@@ -47,11 +47,11 @@ func run() error {
 
 	for _, c := range cc {
 		var uuid string
-		cde_books := ke.Books.BooksByCDEKeys(c.CDEKeys())
+		cde_books := ke.Books.BooksByCDEKeys(c.CDEKeys)
 		if idx := ke.Collection.IdxByTitle(c.Title); idx != -1 {
 			books := ke.Collection[idx].Books
 
-			if len(c.Entities) == len(books) && len(c.Entities) == len(cde_books) {
+			if len(c.CDEKeys) == len(books) && len(c.CDEKeys) == len(cde_books) {
 				for _, b := range cde_books {
 					unique[b.UUID] += 1
 				}
