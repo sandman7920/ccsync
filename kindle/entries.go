@@ -70,7 +70,7 @@ func NewEntries(db_file string) (*Entries, error) {
 		return nil, err
 	}
 
-	cursor, err := db.Query("SELECT i_collection_uuid, i_member_uuid FROM Collections")
+	cursor, err := db.Query("SELECT i_collection_uuid, coalesce(i_member_uuid,'') as i_member_uuid FROM Collections")
 	if err != nil {
 		return nil, err
 	}
