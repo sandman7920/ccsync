@@ -20,6 +20,7 @@ const (
 
 type Config struct {
 	CalibreCollection string
+	CalibreMeta       string
 	KindleCC          string
 	Mode              Mode
 }
@@ -27,6 +28,7 @@ type Config struct {
 func NewConfig() (*Config, error) {
 	cfg := &Config{
 		CalibreCollection: "/mnt/us/system/collections.json",
+		CalibreMeta:       "/mnt/us/metadata.calibre",
 		KindleCC:          "/var/local/cc.db",
 		Mode:              Uknown,
 	}
