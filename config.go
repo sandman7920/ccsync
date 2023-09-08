@@ -62,12 +62,12 @@ func NewConfig() (*Config, error) {
 		return nil, fmt.Errorf("missing required \"-mode\" flag\n%s", buf2str())
 	}
 
-	env_calibre_c := os.Getenv("LS_C_COLLECTION")
+	env_calibre_c := os.Getenv("CCS_C_COLLECTION")
 	if len(env_calibre_c) > 0 {
 		cfg.CalibreCollection = env_calibre_c
 	}
 
-	env_kindle_c := os.Getenv("LS_K_COLLECTION")
+	env_kindle_c := os.Getenv("CCS_K_COLLECTION")
 	if len(env_kindle_c) > 0 {
 		cfg.KindleCC = env_kindle_c
 	}
