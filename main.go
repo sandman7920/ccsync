@@ -5,11 +5,12 @@ import (
 	"os"
 
 	"github.com/sandman7920/ccsync/calibre"
+	"github.com/sandman7920/ccsync/config"
 	"github.com/sandman7920/ccsync/kindle"
 )
 
 func run() error {
-	cfg, err := NewConfig()
+	cfg, err := config.NewConfig()
 	if err != nil {
 		return err
 	}
@@ -20,13 +21,13 @@ func run() error {
 		return err
 	}
 
-	if cfg.Mode == Rebuild || cfg.Mode == Purge {
+	if cfg.Mode == config.Rebuild || cfg.Mode == config.Purge {
 		err := updater.Purge(ke.Collection)
 		if err != nil {
 			return err
 		}
 
-		if cfg.Mode == Purge {
+		if cfg.Mode == config.Purge {
 			return nil
 		}
 
@@ -36,8 +37,12 @@ func run() error {
 	if err != nil {
 		return err
 	}
-
-	cc, err := calibre.NewCollection(cfg.CalibreCollection)
+	var cc calibre.Collection
+	if cfg.Source == config.Meta {
+		cc, err = calibre.NewMetaCollection(cfg.Meta)
+	} else {
+		cc, err = calibre.NewPluginCollection(cfg.CalibreCollection)
+	}
 	if err != nil {
 		return err
 	}

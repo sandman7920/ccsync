@@ -5,26 +5,48 @@
             "priority": -1,
             "items": [
                 {
-                    "name": "Rebuild collections (calibre plugin)",
-                    "priority": 1,
-                    "exitmenu": false,
-                    "checked": true,
-                    "refresh": false,
-                    "status": false,
-                    "internal": "status Rebuilding collections (from Calibre) . . .",
-                    "action": "./ccsync",
-                    "params": "-mode rebuild"
-                },
-                {
-                    "name": "Update collections (calibre plugin)",
+                    "name": "Update (calibre meta)",
                     "priority": 2,
                     "exitmenu": false,
                     "checked": true,
                     "refresh": false,
                     "status": false,
-                    "internal": "status Updating collections (from Calibre) . . .",
+                    "internal": "status Updating collections meta . . .",
                     "action": "./ccsync",
                     "params": "-mode update"
+                },
+                {
+                    "name": "Rebuild (calibre meta)",
+                    "priority": 1,
+                    "exitmenu": false,
+                    "checked": true,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Rebuilding collections meta . . .",
+                    "action": "./ccsync",
+                    "params": "-mode rebuild"
+                },
+                {
+                    "name": "Update (calibre plugin)",
+                    "priority": 2,
+                    "exitmenu": false,
+                    "checked": true,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Updating collections plugin . . .",
+                    "action": "./ccsync",
+                    "params": "-mode update -source collection"
+                },
+                {
+                    "name": "Rebuild (calibre plugin)",
+                    "priority": 1,
+                    "exitmenu": false,
+                    "checked": true,
+                    "refresh": false,
+                    "status": false,
+                    "internal": "status Rebuilding collections plugin . . .",
+                    "action": "./ccsync",
+                    "params": "-mode rebuild -source collection"
                 },
                 {
                     "name": "Delete all collections",
