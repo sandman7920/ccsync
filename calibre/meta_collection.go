@@ -40,6 +40,11 @@ func NewMetaCollection(cfg config.MetaConfig) (Collection, error) {
 		if len(cdeKey) == 0 {
 			cdeKey, _ = jsonparser.GetString(value, "uuid")
 		}
+		if len(cdeKey) == 0 {
+			// Do not add books with empty cdeKey
+			// Probably TXT,Clippings, Dictionaries, etc.
+			return
+		}
 		series, _ := jsonparser.GetString(value, "series")
 		len_series := len(series)
 		if len_series > 0 {
