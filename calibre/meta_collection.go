@@ -36,7 +36,10 @@ func NewMetaCollection(cfg config.MetaConfig) (Collection, error) {
 	}
 
 	_, err = jsonparser.ArrayEach(data, func(value []byte, dataType jsonparser.ValueType, offset int, _ error) {
-		cdeKey, _ := jsonparser.GetString(value, "uuid")
+		cdeKey, _ := jsonparser.GetString(value, "identifiers", "mobi-asin")
+		if len(cdeKey) == 0 {
+			cdeKey, _ = jsonparser.GetString(value, "uuid")
+		}
 		series, _ := jsonparser.GetString(value, "series")
 		len_series := len(series)
 		if len_series > 0 {
