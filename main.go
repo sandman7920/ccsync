@@ -53,6 +53,10 @@ func run() error {
 	for _, c := range cc {
 		var uuid string
 		cde_books := ke.Books.BooksByCDEKeys(c.CDEKeys)
+		if len(cde_books) == 0 {
+			// Skip empty Collections
+			continue
+		}
 		if idx := ke.Collection.IdxByTitle(c.Title); idx != -1 {
 			books := ke.Collection[idx].Books
 
